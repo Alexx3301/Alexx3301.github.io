@@ -1,0 +1,633 @@
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Сборка ПК: Совместимость компонентов</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            user-select: none; /* легкий эффект, не мешает тексту */
+        }
+
+        body {
+            background: linear-gradient(145deg, #10131c 0%, #0b0e14 100%);
+            font-family: 'Segoe UI', 'Poppins', 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Roboto', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+
+        /* главная карточка игры */
+        .game-container {
+            max-width: 1400px;
+            width: 100%;
+            background: rgba(18, 22, 35, 0.7);
+            backdrop-filter: blur(2px);
+            border-radius: 3rem;
+            padding: 1.5rem;
+            box-shadow: 0 25px 45px rgba(0, 0, 0, 0.5), inset 0 1px 1px rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(72, 187, 255, 0.2);
+        }
+
+        /* заголовок */
+        .game-header {
+            text-align: center;
+            margin-bottom: 1.8rem;
+        }
+
+        h1 {
+            font-size: 2.2rem;
+            background: linear-gradient(135deg, #c0e0ff, #3b82f6);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            margin: 0;
+            letter-spacing: -0.5px;
+            text-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        .sub {
+            color: #8a99c4;
+            margin-top: 8px;
+            font-weight: 500;
+            border-top: 1px solid #2a324b;
+            display: inline-block;
+            padding-top: 8px;
+        }
+
+        /* панель счёта и прогресса */
+        .stats-panel {
+            display: flex;
+            justify-content: space-between;
+            background: #0f121fcc;
+            backdrop-filter: blur(8px);
+            padding: 0.8rem 1.8rem;
+            border-radius: 60px;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: 12px;
+            border: 1px solid #2f3a5c;
+        }
+
+        .score-box, .question-counter, .streak {
+            background: #01061466;
+            padding: 6px 20px;
+            border-radius: 40px;
+            font-weight: bold;
+            font-size: 1.2rem;
+            color: #b9e2ff;
+        }
+
+        .score-box span, .question-counter span, .streak span {
+            color: #facc15;
+            font-size: 1.6rem;
+            font-weight: 800;
+            margin-left: 8px;
+        }
+
+        /* основная область с двумя компонентами */
+        .components-area {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+            justify-content: center;
+            margin-bottom: 2rem;
+        }
+
+        .component-card {
+            flex: 1;
+            min-width: 260px;
+            background: #0e1322e6;
+            backdrop-filter: blur(12px);
+            border-radius: 2rem;
+            padding: 1.5rem 1.2rem;
+            border: 1px solid #2f405e;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 10px 20px -5px rgba(0,0,0,0.5);
+        }
+
+        .component-card:hover {
+            transform: translateY(-5px);
+            border-color: #3b82f6;
+            box-shadow: 0 18px 28px -8px black;
+        }
+
+        .component-title {
+            font-size: 1.7rem;
+            font-weight: 700;
+            background: linear-gradient(120deg, #e2eaff, #90b4ff);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            margin-bottom: 1rem;
+            border-left: 4px solid #3b82f6;
+            padding-left: 12px;
+        }
+
+        .spec-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .spec-list li {
+            background: #03061740;
+            margin: 10px 0;
+            padding: 10px 12px;
+            border-radius: 18px;
+            font-size: 0.9rem;
+            color: #cfdfef;
+            font-family: monospace;
+            display: flex;
+            align-items: baseline;
+            gap: 8px;
+            flex-wrap: wrap;
+            border-left: 2px solid #2c3e66;
+        }
+
+        .spec-label {
+            font-weight: bold;
+            color: #ffcf9a;
+            min-width: 95px;
+        }
+
+        .spec-value {
+            color: #b9d9ff;
+            word-break: break-word;
+        }
+
+        .answer-buttons {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            margin: 2rem 0 1.2rem;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            border: none;
+            font-weight: bold;
+            font-size: 1.3rem;
+            padding: 12px 32px;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: 0.2s;
+            font-family: inherit;
+            background: #20263f;
+            color: white;
+            box-shadow: 0 4px 0 #0b0e18;
+        }
+
+        .btn-yes {
+            background: #0f7b3a;
+            box-shadow: 0 4px 0 #05451f;
+        }
+
+        .btn-yes:hover {
+            background: #159e4a;
+            transform: scale(1.02);
+        }
+
+        .btn-no {
+            background: #9e2a2a;
+            box-shadow: 0 4px 0 #541212;
+        }
+
+        .btn-no:hover {
+            background: #c53636;
+            transform: scale(1.02);
+        }
+
+        .btn-next {
+            background: #2c3e6d;
+            padding: 10px 28px;
+            font-size: 1.1rem;
+        }
+
+        .feedback {
+            text-align: center;
+            background: #00000066;
+            padding: 14px;
+            border-radius: 50px;
+            margin: 15px 0;
+            font-weight: 500;
+            transition: 0.2s;
+            font-size: 1rem;
+        }
+
+        .feedback.correct {
+            background: #0b4d2bb3;
+            color: #b5ffcf;
+            border-left: 6px solid #20e070;
+        }
+
+        .feedback.wrong {
+            background: #781d1db3;
+            color: #ffbaba;
+            border-left: 6px solid #ff4a4a;
+        }
+
+        .restart-btn {
+            background: #454f72;
+            margin-top: 5px;
+            padding: 8px 24px;
+            font-size: 0.9rem;
+        }
+
+        footer {
+            text-align: center;
+            font-size: 0.75rem;
+            color: #5c6a8a;
+            margin-top: 25px;
+        }
+
+        @media (max-width: 780px) {
+            .component-card {
+                min-width: 100%;
+            }
+            .stats-panel {
+                justify-content: center;
+            }
+            .btn {
+                padding: 8px 24px;
+                font-size: 1.1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="game-container">
+    <div class="game-header">
+        <h1>🧩 TECH COMPATIBILITY · ИГРА</h1>
+        <div class="sub">Совместимы ли компоненты? 🔧 Оцени пару</div>
+    </div>
+
+    <div class="stats-panel">
+        <div class="score-box">🏆 СЧЕТ: <span id="scoreValue">0</span></div>
+        <div class="question-counter">📋 ВОПРОС: <span id="qIndex">1</span> / <span id="totalQ">10</span></div>
+        <div class="streak">🔥 СЕРИЯ: <span id="streakValue">0</span></div>
+    </div>
+
+    <!-- Два компонента: компонент А и компонент Б -->
+    <div class="components-area">
+        <div class="component-card" id="compA">
+            <div class="component-title" id="compAName">Процессор</div>
+            <ul class="spec-list" id="compASpecs"></ul>
+        </div>
+        <div class="component-card" id="compB">
+            <div class="component-title" id="compBName">Материнская плата</div>
+            <ul class="spec-list" id="compBSpecs"></ul>
+        </div>
+    </div>
+
+    <div class="answer-buttons">
+        <button class="btn btn-yes" id="yesBtn">✅ СОВМЕСТИМЫ</button>
+        <button class="btn btn-no" id="noBtn">❌ НЕ СОВМЕСТИМЫ</button>
+    </div>
+
+    <div class="feedback" id="feedbackMsg">🤔 Нажми «Совместимы» или «Не совместимы», чтобы ответить.</div>
+
+    <div style="display: flex; justify-content: center; gap: 20px; margin-top: 5px;">
+        <button class="btn btn-next" id="nextBtn">➡ СЛЕДУЮЩИЙ ВОПРОС</button>
+        <button class="btn restart-btn" id="restartBtn">🔄 НАЧАТЬ ЗАНОВО</button>
+    </div>
+    <footer>🎮 Учитывай ключевые характеристики: сокеты, TDP, версию PCIe, питание, тип памяти. Удачи, сборщик!</footer>
+</div>
+
+<script>
+    // --------------------------------------------------------------
+    // БАЗА ДАННЫХ КОМПОНЕНТОВ И ИХ ХАРАКТЕРИСТИК
+    // Совместимость определяем по правилам "железа"
+    // Каждый компонент имеет тип и набор свойств.
+    // --------------------------------------------------------------
+    const componentsDB = [
+        { id: "cpu1", type: "CPU", name: "AMD Ryzen 5 7600X", specs: { socket: "AM5", tdp: "105W", memoryType: "DDR5", pcieVersion: "5.0", notes: "встроенная графика" } },
+        { id: "cpu2", type: "CPU", name: "Intel Core i5-13400F", specs: { socket: "LGA1700", tdp: "65W", memoryType: "DDR4/DDR5", pcieVersion: "5.0", notes: "без iGPU" } },
+        { id: "cpu3", type: "CPU", name: "Intel Core i9-13900K", specs: { socket: "LGA1700", tdp: "125W", memoryType: "DDR4/DDR5", pcieVersion: "5.0" } },
+        { id: "cpu4", type: "CPU", name: "AMD Ryzen 7 5800X", specs: { socket: "AM4", tdp: "105W", memoryType: "DDR4", pcieVersion: "4.0" } },
+        { id: "cpu5", type: "CPU", name: "AMD Ryzen 9 7950X", specs: { socket: "AM5", tdp: "170W", memoryType: "DDR5", pcieVersion: "5.0" } },
+        { id: "cpu6", type: "CPU", name: "Intel Core i7-12700K", specs: { socket: "LGA1700", tdp: "125W", memoryType: "DDR4/DDR5", pcieVersion: "5.0" } },
+
+        { id: "mb1", type: "MB", name: "ASUS ROG B650E-F", specs: { socket: "AM5", chipset: "B650", memoryType: "DDR5", pcieSlotGen: "5.0", cpuPowerConnector: "8+4pin" } },
+        { id: "mb2", type: "MB", name: "MSI PRO Z790-A", specs: { socket: "LGA1700", chipset: "Z790", memoryType: "DDR5", pcieSlotGen: "5.0", cpuPowerConnector: "8+8pin" } },
+        { id: "mb3", type: "MB", name: "Gigabyte B760M DS3H", specs: { socket: "LGA1700", chipset: "B760", memoryType: "DDR4", pcieSlotGen: "4.0", cpuPowerConnector: "8pin" } },
+        { id: "mb4", type: "MB", name: "ASRock B450M Steel Legend", specs: { socket: "AM4", chipset: "B450", memoryType: "DDR4", pcieSlotGen: "3.0", cpuPowerConnector: "8pin" } },
+        { id: "mb5", type: "MB", name: "MSI X670E Carbon", specs: { socket: "AM5", chipset: "X670E", memoryType: "DDR5", pcieSlotGen: "5.0", cpuPowerConnector: "8+8pin" } },
+        { id: "mb6", type: "MB", name: "ASUS PRIME H610M-A", specs: { socket: "LGA1700", chipset: "H610", memoryType: "DDR4", pcieSlotGen: "3.0", cpuPowerConnector: "8pin" } },
+
+        { id: "cooler1", type: "COOLER", name: "Deepcool AK620", specs: { compatibleSockets: ["LGA1700","AM4","AM5"], maxTDP: "260W" } },
+        { id: "cooler2", type: "COOLER", name: "Noctua NH-D15", specs: { compatibleSockets: ["LGA1700","AM4","AM5"], maxTDP: "220W" } },
+        { id: "cooler3", type: "COOLER", name: "Stock AMD Wraith Prism", specs: { compatibleSockets: ["AM4"], maxTDP: "105W" } },
+        { id: "cooler4", type: "COOLER", name: "ID-COOLING SE-214-XT", specs: { compatibleSockets: ["LGA1700","AM4","AM5"], maxTDP: "180W" } },
+
+        { id: "gpu1", type: "GPU", name: "NVIDIA RTX 4080", specs: { pcieInterface: "4.0", powerConnectors: "12VHPWR (450W)", recommendedPSU: "750W" } },
+        { id: "gpu2", type: "GPU", name: "AMD Radeon RX 7900 XT", specs: { pcieInterface: "4.0", powerConnectors: "2x8pin", recommendedPSU: "750W" } },
+        { id: "gpu3", type: "GPU", name: "NVIDIA RTX 3060", specs: { pcieInterface: "4.0", powerConnectors: "8pin", recommendedPSU: "550W" } },
+
+        { id: "psu1", type: "PSU", name: "Corsair RM850e", specs: { wattage: "850W", pcie8pinCount: 4, has12VHPWR: true, efficiency: "Gold" } },
+        { id: "psu2", type: "PSU", name: "be quiet! Pure Power 11 600W", specs: { wattage: "600W", pcie8pinCount: 2, has12VHPWR: false, efficiency: "Gold" } },
+        { id: "psu3", type: "PSU", name: "Seasonic Focus 750W", specs: { wattage: "750W", pcie8pinCount: 3, has12VHPWR: false, efficiency: "Gold" } },
+        { id: "psu4", type: "PSU", name: "MSI MPG A1000G", specs: { wattage: "1000W", pcie8pinCount: 5, has12VHPWR: true, efficiency: "Gold" } }
+    ];
+
+    // Массив вопросов: пары (тип A, тип Б) и условие совместимости (функция)
+    // Мы сгенерируем 12+ сценариев, но покажем рандомно 10.
+    // Но для логики создадим множество пар с проверкой.
+    // Чтобы игра была интересной и обучающей, используем детерминированные правила на основе компонентов.
+    
+    // Функция проверки совместимости между двумя компонентами.
+    // Возвращает true/false и пояснение.
+    function checkCompatibility(compA, compB) {
+        // 1. CPU ↔ Материнская плата
+        if (compA.type === "CPU" && compB.type === "MB") return cpuMoboCompat(compA, compB);
+        if (compA.type === "MB" && compB.type === "CPU") return cpuMoboCompat(compB, compA);
+        
+        // 2. CPU ↔ Система охлаждения
+        if (compA.type === "CPU" && compB.type === "COOLER") return cpuCoolerCompat(compA, compB);
+        if (compA.type === "COOLER" && compB.type === "CPU") return cpuCoolerCompat(compB, compA);
+        
+        // 3. GPU ↔ Блок питания (достаточность мощности и разъемы)
+        if (compA.type === "GPU" && compB.type === "PSU") return gpuPsuCompat(compA, compB);
+        if (compA.type === "PSU" && compB.type === "GPU") return gpuPsuCompat(compB, compA);
+        
+        // 4. GPU ↔ Материнская плата (версия PCIe, но совместимость почти всегда есть, кроме совсем древних? 
+        // Сделаем условно: если pcie разница >1 поколения вниз — совместимо, но добавим редкий конфликт - достаточно true, пусть всегда true кроме особого? Для обучения покажем)
+        if ((compA.type === "GPU" && compB.type === "MB") || (compA.type === "MB" && compB.type === "GPU")) return true; // PCIe обратно совместим
+        // 5. Память и мат.плата отдельный кейс, но у нас в вопросах могут быть пары CPU + MB включают тип памяти, поэтому выше охвачено.
+        // 6. Дополнительно: проверка TDP охлаждения и процессора.
+        // 7. Бонус: блок питания с видеокартой уже реализован.
+        
+        // По умолчанию если не подходит ни под одно правило — false, но мы создаем только осмысленные пары.
+        return false;
+    }
+    
+    function cpuMoboCompat(cpu, mobo) {
+        if (cpu.specs.socket !== mobo.specs.socket) return false;
+        // Проверка типа памяти
+        let cpuMem = cpu.specs.memoryType;
+        let moboMem = mobo.specs.memoryType;
+        if (cpuMem && moboMem) {
+            if (cpuMem.includes("DDR5") && moboMem === "DDR4") return false;
+            if (cpuMem === "DDR4" && moboMem === "DDR5") return false;
+        }
+        // для Intel LGA1700 можно DDR4 или DDR5, запасной вариант
+        if (cpu.specs.memoryType === "DDR4/DDR5" && mobo.specs.memoryType === "DDR4") return true;
+        if (cpu.specs.memoryType === "DDR4/DDR5" && mobo.specs.memoryType === "DDR5") return true;
+        return true;
+    }
+    
+    function cpuCoolerCompat(cpu, cooler) {
+        let cpuSocket = cpu.specs.socket;
+        let coolerSockets = cooler.specs.compatibleSockets;
+        if (!coolerSockets) return false;
+        if (!coolerSockets.includes(cpuSocket)) return false;
+        let cpuTDP = parseInt(cpu.specs.tdp) || 0;
+        let coolerTDP = parseInt(cooler.specs.maxTDP) || 0;
+        if (cpuTDP > coolerTDP) return false;
+        return true;
+    }
+    
+    function gpuPsuCompat(gpu, psu) {
+        let gpuPower = gpu.specs.recommendedPSU;
+        if (!gpuPower) return true;
+        let neededW = parseInt(gpuPower);
+        let psuW = parseInt(psu.specs.wattage);
+        if (psuW < neededW) return false;
+        // проверка разъемов: для RTX 4080 нужен 12VHPWR
+        if (gpu.name.includes("RTX 4080") && !psu.specs.has12VHPWR) return false;
+        if (gpu.specs.powerConnectors === "2x8pin") {
+            let pcieCount = psu.specs.pcie8pinCount || 0;
+            if (pcieCount < 2) return false;
+        }
+        if (gpu.specs.powerConnectors === "8pin" && (psu.specs.pcie8pinCount || 0) < 1) return false;
+        return true;
+    }
+    
+    // -------- Генерация уникальных вопросов (пар компонентов) --------
+    const allPossiblePairs = [];
+    // Перебираем разумные типы: CPU+MB, CPU+Cooler, GPU+PSU, а также интересные несовместимости.
+    // Добавим заведомо несовместимые пары, которые создадим вручную.
+    const cpuList = componentsDB.filter(c => c.type === "CPU");
+    const moboList = componentsDB.filter(c => c.type === "MB");
+    const coolerList = componentsDB.filter(c => c.type === "COOLER");
+    const gpuList = componentsDB.filter(c => c.type === "GPU");
+    const psuList = componentsDB.filter(c => c.type === "PSU");
+    
+    // CPU + MB
+    for (let cpu of cpuList) {
+        for (let mb of moboList) {
+            allPossiblePairs.push({ compA: cpu, compB: mb, type: "cpu-mb" });
+        }
+    }
+    // CPU + COOLER
+    for (let cpu of cpuList) {
+        for (let cooler of coolerList) {
+            allPossiblePairs.push({ compA: cpu, compB: cooler, type: "cpu-cooler" });
+        }
+    }
+    // GPU + PSU
+    for (let gpu of gpuList) {
+        for (let psu of psuList) {
+            allPossiblePairs.push({ compA: gpu, compB: psu, type: "gpu-psu" });
+        }
+    }
+    // Добавим особые пары: материнская плата с устаревшим PCIe + современная карта - совместимо, но оставим; ок.
+    // Для интереса добавим пары где компоненты одного типа не должны быть (CPU-CPU) не нужно, не добавляем.
+    
+    // Фильтр чтобы пары не повторялись по id, оставляем уникальные
+    const uniquePairs = [];
+    const pairKeySet = new Set();
+    for (let p of allPossiblePairs) {
+        let key = p.compA.id + "|" + p.compB.id;
+        if (!pairKeySet.has(key)) {
+            pairKeySet.add(key);
+            uniquePairs.push(p);
+        }
+    }
+    
+    // Перемешивание и взятие 12 отличных вопросов
+    function shuffle(arr) {
+        for (let i = arr.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [arr[i], arr[j]] = [arr[j], arr[i]];
+        }
+        return arr;
+    }
+    
+    let gameQuestions = [];
+    function initQuestions() {
+        const shuffled = shuffle([...uniquePairs]);
+        // берем первые 12, но можно 10, но пусть 12 для разнообразия (показываем 10, а запас есть)
+        gameQuestions = shuffled.slice(0, 12).map(pair => {
+            const isCompatible = checkCompatibility(pair.compA, pair.compB);
+            let explanation = "";
+            if (isCompatible) explanation = "✅ Компоненты подходят друг другу!";
+            else {
+                // небольшие подсказки
+                if (pair.compA.type === "CPU" && pair.compB.type === "MB") explanation = "❌ Несовместимость: сокет или тип памяти не совпадают.";
+                else if (pair.compA.type === "CPU" && pair.compB.type === "COOLER") explanation = "❌ Охлаждение не поддерживает сокет или TDP процессора слишком высок.";
+                else if ((pair.compA.type === "GPU" && pair.compB.type === "PSU")) explanation = "❌ Блок питания недостаточной мощности или не хватает разъёмов.";
+                else explanation = "❌ Комплектующие несовместимы по ключевым параметрам.";
+            }
+            return {
+                compA: pair.compA,
+                compB: pair.compB,
+                correct: isCompatible,
+                explanation: explanation
+            };
+        });
+        // обрезаем до 10 вопросов для компактной игры
+        if (gameQuestions.length > 10) gameQuestions = gameQuestions.slice(0, 10);
+    }
+    
+    // состояние игры
+    let currentQuestions = [];
+    let currentIndex = 0;
+    let score = 0;
+    let streak = 0;
+    let answered = false;
+    let currentQuestionObj = null;
+    
+    const scoreSpan = document.getElementById("scoreValue");
+    const qIndexSpan = document.getElementById("qIndex");
+    const totalQSpan = document.getElementById("totalQ");
+    const streakSpan = document.getElementById("streakValue");
+    const compAName = document.getElementById("compAName");
+    const compBName = document.getElementById("compBName");
+    const compASpecs = document.getElementById("compASpecs");
+    const compBSpecs = document.getElementById("compBSpecs");
+    const feedbackDiv = document.getElementById("feedbackMsg");
+    const yesBtn = document.getElementById("yesBtn");
+    const noBtn = document.getElementById("noBtn");
+    const nextBtn = document.getElementById("nextBtn");
+    const restartBtn = document.getElementById("restartBtn");
+    
+    function renderSpecs(component, container) {
+        container.innerHTML = "";
+        const specs = component.specs;
+        for (let [key, value] of Object.entries(specs)) {
+            const li = document.createElement("li");
+            const labelSpan = document.createElement("span");
+            labelSpan.className = "spec-label";
+            labelSpan.innerText = key.toUpperCase() + ":";
+            const valueSpan = document.createElement("span");
+            valueSpan.className = "spec-value";
+            if (typeof value === "object") valueSpan.innerText = JSON.stringify(value);
+            else valueSpan.innerText = value;
+            li.appendChild(labelSpan);
+            li.appendChild(valueSpan);
+            container.appendChild(li);
+        }
+        if (container.children.length === 0) {
+            const li = document.createElement("li");
+            li.innerText = "Нет дополнительных характеристик";
+            container.appendChild(li);
+        }
+    }
+    
+    function loadQuestion() {
+        answered = false;
+        currentQuestionObj = currentQuestions[currentIndex];
+        if (!currentQuestionObj) return;
+        const a = currentQuestionObj.compA;
+        const b = currentQuestionObj.compB;
+        compAName.innerText = a.name + ` (${a.type})`;
+        compBName.innerText = b.name + ` (${b.type})`;
+        renderSpecs(a, compASpecs);
+        renderSpecs(b, compBSpecs);
+        feedbackDiv.innerHTML = "❓ Совместимы или нет? Выбери вариант.";
+        feedbackDiv.className = "feedback";
+        // сбрасываем стили
+        yesBtn.disabled = false;
+        noBtn.disabled = false;
+        nextBtn.disabled = true;
+    }
+    
+    function handleAnswer(userChoice) {
+        if (answered) {
+            feedbackDiv.innerHTML = "⚠️ Ты уже ответил на этот вопрос. Нажми 'Следующий'.";
+            return;
+        }
+        const isCorrect = (userChoice === currentQuestionObj.correct);
+        if (isCorrect) {
+            let addPoints = 10;
+            if (streak >= 2) addPoints = 15;
+            else if (streak >= 4) addPoints = 20;
+            score += addPoints;
+            streak++;
+            feedbackDiv.innerHTML = `🎉 ВЕРНО! ${currentQuestionObj.explanation} +${addPoints} очков. Серия: ${streak}`;
+            feedbackDiv.className = "feedback correct";
+        } else {
+            streak = 0;
+            feedbackDiv.innerHTML = `❌ НЕПРАВИЛЬНО. ${currentQuestionObj.explanation} Правильный ответ: ${currentQuestionObj.correct ? "СОВМЕСТИМЫ" : "НЕ СОВМЕСТИМЫ"}. Серия сброшена.`;
+            feedbackDiv.className = "feedback wrong";
+        }
+        scoreSpan.innerText = score;
+        streakSpan.innerText = streak;
+        answered = true;
+        yesBtn.disabled = true;
+        noBtn.disabled = true;
+        nextBtn.disabled = false;
+    }
+    
+    function nextQuestion() {
+        if (!answered && currentIndex < currentQuestions.length) {
+            feedbackDiv.innerHTML = "⚠️ Сначала ответь на текущий вопрос!";
+            return;
+        }
+        if (currentIndex + 1 < currentQuestions.length) {
+            currentIndex++;
+            loadQuestion();
+        } else {
+            // игра окончена
+            feedbackDiv.innerHTML = `🏁 ИГРА ЗАВЕРШЕНА! Финальный счёт: ${score} из ${currentQuestions.length*10}+. Отличная работа по совместимости! 🖥️`;
+            feedbackDiv.className = "feedback correct";
+            yesBtn.disabled = true;
+            noBtn.disabled = true;
+            nextBtn.disabled = true;
+        }
+        updateCounters();
+    }
+    
+    function updateCounters() {
+        qIndexSpan.innerText = currentIndex+1;
+        totalQSpan.innerText = currentQuestions.length;
+    }
+    
+    function restartGame() {
+        initQuestions();
+        currentQuestions = [...gameQuestions];
+        currentIndex = 0;
+        score = 0;
+        streak = 0;
+        answered = false;
+        scoreSpan.innerText = "0";
+        streakSpan.innerText = "0";
+        updateCounters();
+        loadQuestion();
+        yesBtn.disabled = false;
+        noBtn.disabled = false;
+        nextBtn.disabled = true;
+        feedbackDiv.innerHTML = "🔄 Новая игра! Проверяй совместимость компонентов.";
+        feedbackDiv.className = "feedback";
+    }
+    
+    // инициализация
+    initQuestions();
+    currentQuestions = [...gameQuestions];
+    currentIndex = 0;
+    score = 0;
+    streak = 0;
+    updateCounters();
+    loadQuestion();
+    
+    yesBtn.addEventListener("click", () => handleAnswer(true));
+    noBtn.addEventListener("click", () => handleAnswer(false));
+    nextBtn.addEventListener("click", nextQuestion);
+    restartBtn.addEventListener("click", restartGame);
+</script>
+</body>
+</html>
